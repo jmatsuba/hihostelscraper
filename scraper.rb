@@ -1,5 +1,5 @@
 require 'mechanize'
-require 'ap'
+require 'awesome_print'
 require 'nokogiri'
 
 @private_availability = {}
@@ -46,15 +46,8 @@ def get_table(date)
     f.CheckOutDay = check_out_day
     f.CheckOutYear = check_out_year
   end.click_button
-
-  # this doesnt work for some reason
-  # doc = Nokogiri::HTML(results_page.parser)
-
-  # Temp workaround - Save to File then Load
-  output = File.open( "outputfile.html","w" )
-  output << results_page.parser
-  output.close
-  doc = Nokogiri::HTML(File.open('outputfile.html'))
+  
+  doc = Nokogiri::HTML(results_page.parser.to_s.force_encoding("UTF-8"))
 
   table_array = doc.css("#availTbl").map do |element|
     element.inner_text
