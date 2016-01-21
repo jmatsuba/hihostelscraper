@@ -1,6 +1,7 @@
 require 'mechanize'
 require 'awesome_print'
 require 'nokogiri'
+require 'byebug'
 
 @private_availability = {}
 @female_availability = {}
@@ -58,8 +59,7 @@ end
 
 def parse_table(table)
   availability_table = table[0].split("\n")
-
-  date_index = availability_table[5][0..-2].gsub(/[A-Z][a-z]*/,'').strip.split(' ').collect { |date| Date.today.year.to_s + '/' + date }
+  date_index = availability_table[5][0..-2].gsub(/[A-Z][a-z]*/,'').gsub('/','-').strip.split(' ').collect { |date| Date.today.year.to_s + '-' + date }
   private_room = availability_table.slice(10..23)
   female_dorm = availability_table.slice(27..40)
   male_dorm = availability_table.slice(44..57)
